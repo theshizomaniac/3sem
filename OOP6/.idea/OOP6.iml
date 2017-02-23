@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="CPP_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/Trapeze.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/TArrayItem.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/TAllocator.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Trapeze.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Rectangle.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Rhomb.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Rhomb.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/TArrayItem.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/TemplateArray.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/TIterator.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/main.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Rectangle.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/TAllocator.cpp" isTestSource="false" />
+    </content>
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module-library">
+      <library name="Header Search Paths">
+        <CLASSES>
+          <root url="file:///usr/lib/gcc/x86_64-pc-linux-gnu/6.2.1/include-fixed" />
+          <root url="file:///usr/lib/gcc/x86_64-pc-linux-gnu/6.2.1/include" />
+          <root url="file:///usr/include" />
+          <root url="file:///usr/local/include" />
+        </CLASSES>
+        <SOURCES>
+          <root url="file:///usr/lib/gcc/x86_64-pc-linux-gnu/6.2.1/include-fixed" />
+          <root url="file:///usr/lib/gcc/x86_64-pc-linux-gnu/6.2.1/include" />
+          <root url="file:///usr/include" />
+          <root url="file:///usr/local/include" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+  </component>
+</module>

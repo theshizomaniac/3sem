@@ -1,0 +1,49 @@
+ %   cumulative   self              self     total           
+ time   seconds   seconds    calls  ns/call  ns/call  name    
+ 36.88      0.14     0.14   200000   700.78   700.78  TRedBlackTree::Search(char*)
+ 26.35      0.24     0.10   300000   333.70   333.70  ToLower(char*)
+ 15.81      0.30     0.06   100000   600.67   600.67  TRedBlackTree::BinInsert(TNode*)
+ 15.81      0.36     0.06                             main
+  2.63      0.37     0.01   100000   100.11   700.78  TRedBlackTree::Insert(char*, unsigned long long, int)
+  2.63      0.38     0.01    53242   188.03   188.03  TRedBlackTree::GetSuccessorOf(TNode*) const
+  0.00      0.38     0.00   100002     0.00     0.00  TNode::~TNode()
+  0.00      0.38     0.00   100000     0.00     0.00  TNode::GetKey()
+  0.00      0.38     0.00   100000     0.00     0.00  TNode::TNode(char*, unsigned long long, int)
+  0.00      0.38     0.00    99583     0.00   100.53  TRedBlackTree::DeleteNode(TNode*)
+  0.00      0.38     0.00    74832     0.00     0.00  TRedBlackTree::DeleteFixUp(TNode*)
+  0.00      0.38     0.00    51718     0.00     0.00  TRedBlackTree::LeftRotate(TNode*)
+  0.00      0.38     0.00    48837     0.00     0.00  TRedBlackTree::RightRotate(TNode*)
+  0.00      0.38     0.00        2     0.00     0.00  TNode::TNode()
+  0.00      0.38     0.00        1     0.00     0.00  _GLOBAL__sub_I__Z7ToLowerPc
+  0.00      0.38     0.00        1     0.00     0.00  _GLOBAL__sub_I__ZN5TNode6GetKeyEv
+  0.00      0.38     0.00        1     0.00     0.00  __static_initialization_and_destruction_0(int, int)
+  0.00      0.38     0.00        1     0.00     0.00  __static_initialization_and_destruction_0(int, int)
+  0.00      0.38     0.00        1     0.00     0.00  TRedBlackTree::Destruction(TNode*)
+  0.00      0.38     0.00        1     0.00     0.00  TRedBlackTree::TRedBlackTree()
+  0.00      0.38     0.00        1     0.00     0.00  TRedBlackTree::~TRedBlackTree()
+
+
+ %   cumulative   self              self     total           
+ time   seconds   seconds    calls  ns/call  ns/call  name    
+ 42.91      0.15     0.15   200000   750.84   750.84  TRedBlackTree::Search(char*)
+ 22.88      0.23     0.08   100000   800.89   800.89  TRedBlackTree::BinInsert(TNode*)
+ 14.30      0.28     0.05   200000   250.28   250.28  ToLower(char*)
+ 14.30      0.33     0.05                             main
+  2.86      0.34     0.01   100000   100.11   901.01  TRedBlackTree::Insert(char*, unsigned long long, int)
+  2.86      0.35     0.01    53242   188.03   188.03  TRedBlackTree::GetSuccessorOf(TNode*) const
+  0.00      0.35     0.00   100002     0.00     0.00  TNode::~TNode()
+  0.00      0.35     0.00   100000     0.00     0.00  TNode::GetKey()
+  0.00      0.35     0.00   100000     0.00     0.00  TNode::TNode(char*, unsigned long long, int)
+  0.00      0.35     0.00    99583     0.00   100.53  TRedBlackTree::DeleteNode(TNode*)
+  0.00      0.35     0.00    74832     0.00     0.00  TRedBlackTree::DeleteFixUp(TNode*)
+  0.00      0.35     0.00    51718     0.00     0.00  TRedBlackTree::LeftRotate(TNode*)
+  0.00      0.35     0.00    48837     0.00     0.00  TRedBlackTree::RightRotate(TNode*)
+  0.00      0.35     0.00        2     0.00     0.00  TNode::TNode()
+  0.00      0.35     0.00        1     0.00     0.00  _GLOBAL__sub_I__Z7ToLowerPc
+  0.00      0.35     0.00        1     0.00     0.00  _GLOBAL__sub_I__ZN5TNode6GetKeyEv
+  0.00      0.35     0.00        1     0.00     0.00  __static_initialization_and_destruction_0(int, int)
+  0.00      0.35     0.00        1     0.00     0.00  __static_initialization_and_destruction_0(int, int)
+  0.00      0.35     0.00        1     0.00     0.00  TRedBlackTree::Destruction(TNode*)
+  0.00      0.35     0.00        1     0.00     0.00  TRedBlackTree::TRedBlackTree()
+  0.00      0.35     0.00        1     0.00     0.00  TRedBlackTree::~TRedBlackTree()
+

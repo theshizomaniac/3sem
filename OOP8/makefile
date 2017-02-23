@@ -1,0 +1,2 @@
+all:
+	g++ -pthread main.cpp TArrayItem.h Rectangle.cpp Rectangle.h Rhomb.cpp Rhomb.h Trapeze.cpp Trapeze.h TemplateArray.h TAllocator.cpp TAllocator.h TArrayItem.cpp -std=c++11 -g -o lab

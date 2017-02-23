@@ -1,0 +1,36 @@
+execve("/usr/bin/touch", ["touch", "1.txt"], [/* 36 vars */]) = 0
+brk(NULL)                               = 0x2049000
+access("/etc/ld.so.preload", R_OK)      = -1 ENOENT (No such file or directory)
+open("/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 3
+fstat(3, {st_mode=S_IFREG|0644, st_size=181092, ...}) = 0
+mmap(NULL, 181092, PROT_READ, MAP_PRIVATE, 3, 0) = 0x7ff5ea4d5000
+close(3)                                = 0
+open("/usr/lib/libc.so.6", O_RDONLY|O_CLOEXEC) = 3
+read(3, "\177ELF\2\1\1\3\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\260\3\2\0\0\0\0\0"..., 832) = 832
+fstat(3, {st_mode=S_IFREG|0755, st_size=1951744, ...}) = 0
+mmap(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7ff5ea4d3000
+mmap(NULL, 3791152, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7ff5e9f42000
+mprotect(0x7ff5ea0d7000, 2093056, PROT_NONE) = 0
+mmap(0x7ff5ea2d6000, 24576, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x194000) = 0x7ff5ea2d6000
+mmap(0x7ff5ea2dc000, 14640, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7ff5ea2dc000
+close(3)                                = 0
+arch_prctl(ARCH_SET_FS, 0x7ff5ea4d44c0) = 0
+mprotect(0x7ff5ea2d6000, 16384, PROT_READ) = 0
+mprotect(0x60e000, 4096, PROT_READ)     = 0
+mprotect(0x7ff5ea502000, 4096, PROT_READ) = 0
+munmap(0x7ff5ea4d5000, 181092)          = 0
+brk(NULL)                               = 0x2049000
+brk(0x206a000)                          = 0x206a000
+open("/usr/lib/locale/locale-archive", O_RDONLY|O_CLOEXEC) = 3
+fstat(3, {st_mode=S_IFREG|0644, st_size=2916624, ...}) = 0
+mmap(NULL, 2916624, PROT_READ, MAP_PRIVATE, 3, 0) = 0x7ff5e9c79000
+close(3)                                = 0
+open("1.txt", O_WRONLY|O_CREAT|O_NOCTTY|O_NONBLOCK, 0666) = 3
+dup2(3, 0)                              = 0
+close(3)                                = 0
+utimensat(0, NULL, NULL, 0)             = 0
+close(0)                                = 0
+close(1)                                = 0
+close(2)                                = 0
+exit_group(0)                           = ?
++++ exited with 0 +++
