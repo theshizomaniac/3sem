@@ -18,7 +18,7 @@
 //#include "unpipc.h"
 #define SNAME "/mysem"
 #define SHMSIZE 100
-#define WORKERS_NUM 100
+#define WORKERS_NUM 2
 
 int main (int argc, char const *argv[])
 {
@@ -54,17 +54,19 @@ int main (int argc, char const *argv[])
 
 
 	void* context = zmq_ctx_new();
+    void * ttt = zmq_ctx_new();
 	// This is the socket that we send messages.
 	void* socket = zmq_socket(context, ZMQ_PUSH);
 	zmq_bind(socket, "tcp://*:4040");
 	// This is the socket that we send batch message.
 	void* connector = zmq_socket(context, ZMQ_PUSH);
 	zmq_connect(connector, "tcp://localhost:5050");
-    void* receiver = zmq_socket(context, ZMQ_PULL);
-    zmq_connect(receiver, "tcp://localhost:1010");
+    void* receiver = zmq_socket(ttt, ZMQ_PULL);
+    //zmq_connect(receiver, "tcp://localhost:2222");
+    zmq_bind(receiver, "tcp://*:2222");
 
 
-	printf("Please press enter when workers are ready...");
+	//printf("Please press enter when workers are ready...");
 	pid_t workers[WORKERS_NUM];
     for (int i = 0; i < WORKERS_NUM; ++i) {
         workers[i] = fork();
@@ -76,7 +78,7 @@ int main (int argc, char const *argv[])
     }
     getchar();
 
-	printf("Sending tasks to workers...\n");
+	//printf("Sending tasks to workers...\n");
 	// The first message. It's also the signal start of batch.
 	int length = strlen("-1");
 	zmq_msg_t message;
@@ -92,24 +94,38 @@ int main (int argc, char const *argv[])
 	for(;;)
 	{
         printf("one tick\n");
+
+        /*Receiving message*/
         zmq_msg_t reply;
         zmq_msg_init(&reply);
         zmq_msg_recv(&reply, receiver, 0);
+        printf("message received\n");
+        zmq_msg_recv(&reply, socket, 0);
         int length = zmq_msg_size(&reply);
         char* msg = malloc(length + 1);
         memcpy(msg, zmq_msg_data(&reply), length);
         zmq_msg_close(&reply);
+        /*----------------------*/
 
+        /* sending to workers*/
 		int load = atoi(msg);
 		msec += load;
 		char string[10];
 		sprintf(string, "%d", load);
         printf("string = %s\n", string);
-
         zmq_msg_init_size(&message, strlen(string));
         memcpy(zmq_msg_data(&message), string, strlen(string));
         zmq_msg_send(&message, socket, 0);
         zmq_msg_close(&message);
+        /*----------------------*/
+
+        /*sending answer to client*/
+        char * answer = "ok!\n";
+        zmq_msg_init_size(&message, strlen(answer));
+        memcpy(zmq_msg_data(&message), string, strlen(answer));
+        zmq_msg_send(&message, receiver, 0);
+        zmq_msg_close(&message);
+        /*----------------------*/
 
 	}
 	printf("Total: %d msec\n", msec);

@@ -1,4 +1,4 @@
-gcc -Wall -lzmq -g -pthread hb_collector.c  -o hbc
-gcc -Wall -lzmq  -g -pthread hb_workers.c -o hbw
-gcc -Wall -lzmq -g -pthread hb_server.c -o hbserver
-gcc -Wall -lzmq -g -pthread cl_ex.c -o hbclient
+gcc  -lzmq -g -pthread hb_collector.c  -o hbc
+gcc  -lzmq  -g -pthread hb_workers.c -o hbw
+gcc  -lzmq -g -pthread hb_server.c -o hbserver
+gcc  -lzmq -g -pthread cl_ex.c -o hbclient

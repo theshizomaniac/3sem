@@ -27,8 +27,9 @@ int main(int argc, char const *argv[])
 	printf("Client %d Starting...\n", clientId);
 
 	void* senderSocket = zmq_socket(context, ZMQ_PUSH);
-	zmq_connect(senderSocket, "tcp://localhost:1010");
-	int count = 0;
+	zmq_connect(senderSocket, "tcp://localhost:2222");
+	//zmq_bind(senderSocket, "tcp://*:2222");
+    int count = 0;
 
     /*bool zzz;
     zmq_msg_t new_c;
@@ -57,23 +58,30 @@ int main(int argc, char const *argv[])
         int md = 1 + rand() % 100;
 
         char string[10];
-        sprintf(string, "%d", load);
+        sprintf(string, "%d", md);
         printf("string = %s\n", string);
 		zmq_msg_t zmqMessage;
-		zmq_msg_init_size(&zmqMessage, sizeof(char));
-		memcpy(zmq_msg_data(&zmqMessage), &md, sizeof(char));
+		zmq_msg_init_size(&zmqMessage, strlen(string) * sizeof(char));
+		memcpy(zmq_msg_data(&zmqMessage), &md, strlen(string)*sizeof(char));
 
 		//printf("Sending: - %d num = %s\n", count, md);
 
 		int send = zmq_msg_send(&zmqMessage, senderSocket, 0);
+        if (send == -1) {
+            perror("send failed");
+            return -1;
+        }
+		else {
+            printf("success\n");
+        }
 		zmq_msg_close(&zmqMessage);
 
-		/*zmq_msg_t reply;
+		zmq_msg_t reply;
 		zmq_msg_init(&reply);
 		zmq_msg_recv(&reply, senderSocket, 0);
 		size_t  repSize = zmq_msg_size(&reply);
 		printf("Received: - %d %s\n", repSize, zmq_msg_data(&reply));
-		zmq_msg_close(&reply);*/
+		zmq_msg_close(&reply);
 
 		usleep(1000);
 		count++;
