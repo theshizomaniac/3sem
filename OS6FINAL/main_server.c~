@@ -95,7 +95,7 @@ int main(int argc, char const *argv[]) {
                         char credit_balance[100];
                         
                         memcpy(credit_balance, "Taking cash from credit account!\n", sizeof("Taking cash from credit account!\n"));
-                        strcat(credit_balance, "Credit account balance: ");
+                        strcat(credit_balance, " Credit account balance: ");
                         //memcpy(credit_balance, "Credit account balance: ", strlen("Credit account balance: "));
 		        snprintf(char_balance, sizeof(balance), "%d", client->amount);
 		        snprintf(char_cr_balance, sizeof(char_cr_balance), "%d", client->credit);
