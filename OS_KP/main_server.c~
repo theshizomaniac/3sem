@@ -1,0 +1,41 @@
+
+#include <string.h>
+#include <stdio.h>
+#include <zmq.h>
+#include <stdlib.h>
+#include <string.h>
+#define MAX_MESSAGE_SIZE 1000
+#define NAME_SIZE
+typedef struct MessageData {
+    double userId;
+    char name[NAME_SIZE];
+    char message[MAX_MESSAGE_SIZE];
+} MessageData;
+
+
+int main(int argc, char * argv[])
+{
+
+    void* context = zmq_ctx_new();
+    void* serverSocket = zmq_socket(context, ZMQ_PUB);
+    char* addres = (char*)malloc(sizeof(char) * 14);
+    memcpy(addres, "tcp://*:", 8);
+    memcpy(addres + 8, argv[1], strlen(argv[1]) + 1);
+    zmq_bind(serverSocket, addres);
+    int i = 10;
+    char answer[255];
+    while(i-->0) {
+         zmq_msg_t message;
+        zmq_msg_init(&message);
+        zmq_msg_recv(&message, serverSocket, 0);
+        MessageData* md = (MessageData*)zmq_msg_data(&message);
+        
+        
+        zmq_msg_init_size(&reply, strlen(answer) + 1);
+        memcpy(zmq_msg_data(&reply), answer, strlen(answer) + 1);
+
+        zmq_msg_send(&reply, serverSocket, 0);
+        zmq_msg_close(&reply);
+        zmq_msg_close(&message);
+    }
+}

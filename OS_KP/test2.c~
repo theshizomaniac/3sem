@@ -1,0 +1,21 @@
+#include "stdio.h"
+
+int main()
+{
+        printf("hello world!\n");
+        //char * a = (char*)malloc(255*sizeof(char));
+        char * a = NULL;
+        int i = 10;
+        //const int MAX_STRING_SIZE = 255;
+        size_t size;
+        while (i-->0) {
+        //scanf("%s", a);
+        getline(&a,&size,stdin); 
+        //system("clear");
+        printf("\033[A");
+        printf("\33[2K\r");
+        //printf("\r         ");
+        printf("Alex: %s", a);
+        printf("> ");
+        }
+}
