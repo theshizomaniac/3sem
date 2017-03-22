@@ -6,9 +6,10 @@
 #include <errno.h>
 #include <pthread.h>
 #include "TVector.h"
+#include <stdbool.h>
 #define MAX_STRING_SIZE 255
 #define MAX_CMD_SIZE 10
-#define BALANCE_WORD_SIZE strlen("Balance: ")
+#define MAX_NUM_OF_DIALOGS 10
 typedef struct MessageData {
     double userId;
     char name[10];
@@ -16,6 +17,16 @@ typedef struct MessageData {
     char message[MAX_STRING_SIZE];
 } MessageData;
 
+typedef struct WaitingRoom {
+    double reqId;
+    double sleepingId;
+    char port[5];
+} WaitingRoom;
+
+typedef struct PortUsage {
+    char port[6];
+    bool used;
+} PortUsage;
 
 void * new_dialog(void * arg)
 {
@@ -40,9 +51,9 @@ void * new_dialog(void * arg)
                 
                 //memcpy(md->name, "Name", 4);
                 //memcpy(md->message, "message", 7);
-                printf("RECEIVED: %s: %s\n", md->name, md->message);
+                //printf("RECEIVED: %s: %s\n", md->name, md->message);
                 strcat(answer,md->name);
-                strcat(answer, ":");
+                strcat(answer, ": ");
                 strcat(answer, md->message);
                 //memcpy(answer, md->name, sizeof(md->name));
                 //memcpy(answer + sizeof(md->name),
@@ -65,6 +76,10 @@ void * new_dialog(void * arg)
                 memset(answer, '\0', MAX_STRING_SIZE);
                 usleep(1000);
         }
+        zmq_close(recvSocket);
+        zmq_ctx_destroy(context);
+        zmq_close(chatSocket);
+        zmq_ctx_destroy(pub_context);
 }
 
 int main(int argc, char const *argv[]) {
@@ -77,7 +92,12 @@ int main(int argc, char const *argv[]) {
         printf("Error: invalid port!\n");
         return 2;
     }
-
+    PortUsage x;
+    int chat_number = -1;
+    
+    memcpy(x.port, argv[1], strlen(argv[1]) + 1);
+    x.port[strlen(x.port)-1]++;
+    printf("x port == %s\n", x.port);
     void* context = zmq_ctx_new();
     void* serverSocket = zmq_socket(context, ZMQ_REP);
     char* addres = (char*)malloc(sizeof(char) * 14);
@@ -87,9 +107,9 @@ int main(int argc, char const *argv[]) {
     printf("Char server %d starting\n", port);
     
     pthread_t chat_thread;
-    char * d_address = (char*)malloc(sizeof(char) * 14);
-    memcpy(d_address, "tcp://*:", 8);
-    memcpy(d_address + 8, argv[2], strlen(argv[2]) + 1);
+    char * d_address = (char*)malloc(sizeof(char) * 14);      // CHAT ADDR CHAR
+    memcpy(d_address, "tcp://*:", 8);                           // CHAT ADDR
+    memcpy(d_address + 8, x.port, strlen(x.port) + 1);           // CHAT PORT
     //int res = pthread_create(&chat_thread, NULL, new_dialog, (void*)d_address);
     //if (res) {
     //            printf("Error with creating thread\n");
@@ -97,7 +117,7 @@ int main(int argc, char const *argv[]) {
    // }
     //pthread_join(chat_thread, (void **) &res);
     //return 0;
-    
+    WaitingRoom * starting_chats = (WaitingRoom*) malloc(sizeof(WaitingRoom) * MAX_NUM_OF_DIALOGS);
     TVector* clients = Load(argv[1]);
     char answer[MAX_STRING_SIZE];
     while(1) {
@@ -123,13 +143,11 @@ int main(int argc, char const *argv[]) {
             TElem* client = FindId(clients, md->userId);
             if (client) {
                 if (!strcmp(md->command, "check")) {
-		    //char balance[15];
-		    //snprintf(balance, sizeof(balance), "%d", client->amount);
-                   // memcpy(answer, "Balance: ", 9);
-		   // printf("client amount: %d char = %s\n", client->amount, balance);
-		    //memcpy(answer + BALANCE_WORD_SIZE, balance, strlen(balance));
-		    
-                    //_itoa_s(client->amount, answer + 9, MAX_STRING_SIZE - 9, 10);
+	              for (int i = 0; i < MAX_NUM_OF_DIALOGS; i++) {
+	                     if(md->userId == starting_chats[i].sleepingId) {
+		                      memcpy(answer, starting_chats[i].port, strlen(starting_chats[i].port)+1); 
+		              }
+		      }
                  }
                  else if (!strcmp(md->command, "reg")) {
                         memcpy(answer,"testing\0",8);
@@ -154,7 +172,11 @@ int main(int argc, char const *argv[]) {
                 }
                 else if (!strcmp("chat", md->command)) {
                      printf("starting chat\n");
-                     memcpy(answer, "chat", 4);
+                     chat_number++;
+                     starting_chats[chat_number].reqId = md->userId;
+                     starting_chats[chat_number].sleepingId = atof(md->message);
+                     memcpy(starting_chats[chat_number].port, x.port ,strlen(x.port) + 1);
+                     memcpy(answer, x.port, 5);            //, strlen(x->port));
                      int res = pthread_create(&chat_thread, NULL, new_dialog, (void*)d_address);
                      if (res) {
                         printf("Error with creating thread\n");

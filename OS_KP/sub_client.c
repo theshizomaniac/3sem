@@ -44,11 +44,14 @@ int main(int argc, char * argv[])
     zmq_connect(recvSocket,recv_addres);
     zmq_setsockopt(recvSocket, ZMQ_SUBSCRIBE,"",0);
     int i = 10;
-    while(i-->0) {
+    while(1) {
         zmq_msg_t message;
         zmq_msg_init(&message);
         zmq_msg_recv(&message, recvSocket, 0);
-        printf("%s\n", (char*)zmq_msg_data(&message));
+        //if (!strcmp((char*)zmq_msg_data(&message), "/exit")) {
+        //        exit(0);
+        //}
+        printf("%s", (char*)zmq_msg_data(&message));
         zmq_msg_close(&message);
         zmq_msg_close(&message);
     } 
