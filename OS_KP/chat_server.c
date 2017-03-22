@@ -6,12 +6,12 @@
 #include <errno.h>
 #include <pthread.h>
 #include "TVector.h"
-#define MAX_STRING_SIZE 1000
-#define MAX_CMD_SIZE 20
+#define MAX_STRING_SIZE 255
+#define MAX_CMD_SIZE 10
 #define BALANCE_WORD_SIZE strlen("Balance: ")
 typedef struct MessageData {
     double userId;
-    char name[20];
+    char name[10];
     char command[MAX_CMD_SIZE];
     char message[MAX_STRING_SIZE];
 } MessageData;
@@ -20,6 +20,7 @@ typedef struct MessageData {
 void * new_dialog(void * arg)
 {
         char * adress = (char*) arg;
+        printf("sizeof message %d\n", sizeof(MessageData));
         printf("SENDING ADDR: %s\n", adress);
         void* context = zmq_ctx_new();
         void* pub_context= zmq_ctx_new();
@@ -31,7 +32,7 @@ void * new_dialog(void * arg)
         printf("RECEVING ADDR: %s\n", adress);
         char answer[MAX_STRING_SIZE];
         int i= 10;
-        while(i-->0) {
+        while(1) {
                 zmq_msg_t message;
                 zmq_msg_init(&message);
                 zmq_msg_recv(&message, recvSocket, 0);
@@ -47,11 +48,11 @@ void * new_dialog(void * arg)
                 //memcpy(answer + sizeof(md->name),
                 printf("sending back::::: %s\n",answer);
                 
-                /*zmq_msg_t check_reply;
+                zmq_msg_t check_reply;
                 zmq_msg_init_size(&check_reply, strlen("ok") + 1);
                 memcpy(zmq_msg_data(&check_reply), "ok", strlen(answer) + 1);
                 zmq_msg_send(&check_reply, recvSocket, 0);
-                zmq_msg_close(&check_reply);*/
+                zmq_msg_close(&check_reply);
                                 
                 /* SUB REPLY*/
                 zmq_msg_t reply;
@@ -89,18 +90,19 @@ int main(int argc, char const *argv[]) {
     char * d_address = (char*)malloc(sizeof(char) * 14);
     memcpy(d_address, "tcp://*:", 8);
     memcpy(d_address + 8, argv[2], strlen(argv[2]) + 1);
-    int res = pthread_create(&chat_thread, NULL, new_dialog, (void*)d_address);
-    if (res) {
-                printf("Error with creating thread\n");
-                return -1;
-    }
-    pthread_join(chat_thread, (void **) &res);
-    return 0;
+    //int res = pthread_create(&chat_thread, NULL, new_dialog, (void*)d_address);
+    //if (res) {
+    //            printf("Error with creating thread\n");
+    //            return -1;
+   // }
+    //pthread_join(chat_thread, (void **) &res);
+    //return 0;
     
     TVector* clients = Load(argv[1]);
     char answer[MAX_STRING_SIZE];
     while(1) {
         Save(clients, argv[1]);
+        printf("::::\n");
         zmq_msg_t message;
         zmq_msg_init(&message);
         zmq_msg_recv(&message, serverSocket, 0);
@@ -151,6 +153,13 @@ int main(int argc, char const *argv[]) {
                     }
                 }
                 else if (!strcmp("chat", md->command)) {
+                     printf("starting chat\n");
+                     memcpy(answer, "chat", 4);
+                     int res = pthread_create(&chat_thread, NULL, new_dialog, (void*)d_address);
+                     if (res) {
+                        printf("Error with creating thread\n");
+                        return -1;
+                     }
                      
                 }
             }
