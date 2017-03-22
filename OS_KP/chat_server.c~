@@ -51,30 +51,32 @@ void * new_dialog(void * arg)
                 
                 //memcpy(md->name, "Name", 4);
                 //memcpy(md->message, "message", 7);
-                printf("RECEIVED: %s: %s\n", md->name, md->message);
+                //printf("RECEIVED: %s: %s\n", md->name, md->message);
                 strcat(answer,md->name);
                 strcat(answer, ": ");
                 strcat(answer, md->message);
                 //memcpy(answer, md->name, sizeof(md->name));
                 //memcpy(answer + sizeof(md->name),
                 printf("sending back::::: %s\n",answer);
-                
+                sleep(1);         
                 zmq_msg_t check_reply;
                 zmq_msg_init_size(&check_reply, strlen("ok") + 1);
-                memcpy(zmq_msg_data(&check_reply), "ok", strlen(answer) + 1);
+                memcpy(zmq_msg_data(&check_reply), "ok", strlen("ok") + 1);
                 zmq_msg_send(&check_reply, recvSocket, 0);
                 zmq_msg_close(&check_reply);
-                                
+                       
+                            
                 /* SUB REPLY*/
                 zmq_msg_t reply;
                 zmq_msg_init_size(&reply, strlen(answer) + 1);
                 memcpy(zmq_msg_data(&reply), answer, strlen(answer) + 1);
-
-                zmq_msg_send(&reply, chatSocket, 0);
+                printf("size = %d\n", sizeof(reply));
+                //zmq_msg_send(&reply, chatSocket, 0);
+                zmq_send(chatSocket, &reply,strlen(answer),0);
                 zmq_msg_close(&reply);
                 zmq_msg_close(&message);
                 memset(answer, '\0', MAX_STRING_SIZE);
-                usleep(1000);
+                
         }
         zmq_close(recvSocket);
         zmq_ctx_destroy(context);

@@ -76,7 +76,7 @@ int main(int argc, char * argv[])
         zmq_msg_recv(&server_answer, mainSocket, 0);
         char * m_answer = (char*)zmq_msg_data(&server_answer);
         printf("main answer:: %s\n", m_answer); 
-        if ((!strcmp(md->command, "chat") || !strcmp(md->command, "check")) && !strcmp(m_answer, "no")) {
+        if ((!strcmp(md->command, "chat") || !strcmp(md->command, "check")) && strcmp(m_answer, "no")) {
                 //m_answer[strlen(m_answer)-1]++;
                 //memcpy(addres + 16, m_answer, strlen(m_answer) + 1);
                 //zmq_connect(senderSocket, addres);

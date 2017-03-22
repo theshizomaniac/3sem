@@ -48,9 +48,9 @@ int main(int argc, char * argv[])
         zmq_msg_t message;
         zmq_msg_init(&message);
         zmq_msg_recv(&message, recvSocket, 0);
-        if (!strcmp((char*)zmq_msg_data(&message), "/exit")) {
-                exit(0);
-        }
+        //if (!strcmp((char*)zmq_msg_data(&message), "/exit")) {
+        //        exit(0);
+        //}
         printf("%s", (char*)zmq_msg_data(&message));
         zmq_msg_close(&message);
         zmq_msg_close(&message);

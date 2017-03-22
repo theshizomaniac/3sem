@@ -89,6 +89,7 @@ int main(int argc, char * argv[])
                 pid_t chat;
                 chat = fork();
                 if (chat == 0) {
+                        sleep(5);   
                         execl("/usr/bin/xterm", "xterm", "-e", sub_chat, NULL);
                 }
                 /* STARTING DIALOG */
