@@ -7,12 +7,12 @@
 
 typedef struct TElem {
     double id;
-    char name[20];
-    char sex[1];
-    char age[2];
-    char country[20];
-    char login[12];
-    char pass[12];
+    char name[21];
+    char sex[2];
+    char age[3];
+    char country[3];
+    char login[13];
+    char pass[13];
     bool online;
 } TElem;
 
@@ -29,7 +29,13 @@ int Size(TVector* vec);
 int Empty(TVector* vec);
 TElem* Pop(TVector* vec);
 TElem* Erase(TVector* vec, int index);
+
 TElem* FindId(TVector* vec, char id[]);
+TElem* FindAge(TVector* vec, char age[],int *j);
+TElem* FindName(TVector* vec, char name[], int *j);
+TElem* FindSex(TVector* vec, char sex[],int *j);
+TElem* FindCountry(TVector* vec, char country[],int *j);
+
 void RemoveElem(TVector* vec, double id);
 void Push(TVector* vec, TElem* value);
 void Insert(TVector* vec, TElem* value, int index);

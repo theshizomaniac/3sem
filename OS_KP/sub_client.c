@@ -30,7 +30,9 @@ int main(int argc, char * argv[])
     
     zmq_connect(recvSocket,recv_addres);
     zmq_setsockopt(recvSocket, ZMQ_SUBSCRIBE,"",0);
-    int i = 10;
+    //int i = 10;
+    printf("Type /dis to disconnect from chat\n");
+    
     while(1) {
         zmq_msg_t message;
         zmq_msg_init(&message);

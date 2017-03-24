@@ -1,11 +1,9 @@
 #include "TVector.h"
-
+#include <string.h>
 TElem* NewElem(char id[], int amount) {
     TElem* elem = (TElem*)malloc(sizeof(TElem));
     memcpy(elem->login, id, 12);
-    //elem->id = id;
-    //elem->amount = amount;
-    //elem->credit = 0;
+    
     return elem;
 }
 
@@ -53,6 +51,43 @@ TElem* FindId(TVector* vec, char id[]) {
         //if(fabs(vec->body[i]->id - id) < EPS)
         if (!strcmp(vec->body[i]->login, id))
             return vec->body[i];
+    return NULL;
+}
+
+TElem* FindAge(TVector* vec, char age[], int *j) {
+    for (int i = *j; i < vec->size; i++) {
+        //if(fabs(vec->body[i]->id - id) < EPS)
+        *j = i + 1;
+        if (!strcmp(vec->body[i]->age, age))
+            return vec->body[i];
+        }
+    return NULL;
+}
+TElem* FindName(TVector* vec, char name[], int *j) {
+    for (int i = *j; i < vec->size; i++) {
+        //if(fabs(vec->body[i]->id - id) < EPS)
+        *j = i + 1;
+        if (!strcmp(vec->body[i]->name, name))
+            return vec->body[i];
+        }
+    return NULL;
+}
+TElem* FindSex(TVector* vec, char sex[], int *j) {
+    for (int i = *j; i < vec->size; i++) {
+        //if(fabs(vec->body[i]->id - id) < EPS)
+        *j = i + 1;
+        if (!strcmp(vec->body[i]->sex, sex))
+            return vec->body[i];
+        }
+    return NULL;
+}
+TElem* FindCountry(TVector* vec, char name[], int *j) {
+    for (int i = *j; i < vec->size; i++) {
+        //if(fabs(vec->body[i]->id - id) < EPS)
+        *j = i + 1;
+        if (!strcmp(vec->body[i]->country, country))
+            return vec->body[i];
+        }
     return NULL;
 }
 
