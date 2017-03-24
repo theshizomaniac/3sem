@@ -88,7 +88,7 @@ int main(int argc, char const *argv[]) {
                         client->amount -= md->ammount;
                         client->credit += client->amount;
                         client->amount = 0;
-                        printf("1\n");
+                       
                         char balance[30] = "\nBalance: ";
                         char char_balance[30];
                         char char_cr_balance[20];
@@ -99,65 +99,76 @@ int main(int argc, char const *argv[]) {
                         
 		        snprintf(char_balance, sizeof(balance), "%d", client->amount);
 		        snprintf(char_cr_balance, sizeof(char_cr_balance), "%d", client->credit);
-		        printf("2\n");
+		       
 		        strcat(credit_balance, char_cr_balance);
 		        strcat(balance, char_balance);
-		        printf("3\n");
-		        strcat(credit_balance, balance);
 		       
-		  
-		        
-		        memcpy(answer, credit_balance, sizeof(credit_balance));
-		        
+		        strcat(credit_balance, balance);		        
+		        memcpy(answer, credit_balance, sizeof(credit_balance));     
                         
                         }
                     else {
                         client->amount -= md->ammount;
                         char balance[15];
 		        snprintf(balance, sizeof(balance), "%d", client->amount);
-		        memcpy(answer, "Balance: ", 9);
-		        printf("client amount: %d\n", client->amount);
-		        memcpy(answer + BALANCE_WORD_SIZE, balance, strlen(balance));
-                        //_itoa_s(client->amount, answer + 9, MAX_STRING_SIZE - 9, 10);
+		        memcpy(answer, "Balance: ", 9);		        
+		        memcpy(answer + BALANCE_WORD_SIZE, balance, strlen(balance));                        
                     }
                 }
                 else if (!strcmp(md->command, "cr_deposit")) {
                     client->credit += md->ammount;
                     char balance[15];
 		    snprintf(balance, sizeof(balance), "%d", client->credit);
-                    memcpy(answer, "Credit account balance: ", strlen("Credit account balance: "));
-		    printf("client amount: %d\n", client->amount);
+                    memcpy(answer, "Credit account balance: ", strlen("Credit account balance: "));		   
 		    memcpy(answer + strlen("Credit account balance: "), balance, strlen(balance));
                     
                 }
                 else if (!strcmp(md->command, "cr_withdraw")) {
-                        client->credit -= md->ammount;
-                       
+                        client->credit -= md->ammount;                       
                         char balance[15];
 		        snprintf(balance, sizeof(balance), "%d", client->credit);
-		        memcpy(answer, "Credit account balance: ", strlen("Credit account balance"));
-		        printf("client amount: %d\n", client->amount);
+		        memcpy(answer, "Credit account balance: ", strlen("Credit account balance"));		        
 		        memcpy(answer + strlen("Credit account balance"), balance, strlen(balance));
                 }
                 else if (!strcmp(md->command, "transfer")) {
-                    if (md->ammount > client->amount)
-                        memcpy(answer, "Not enough money!\0", 18);
-                    else {
                         TElem* transCl = FindId(clients, md->transId);
                         if (transCl) {
-                            client->amount -= md->ammount;
-                            transCl->amount += md->ammount;
-                            char balance[15];
-		            snprintf(balance, sizeof(balance), "%d", client->amount);
-                            memcpy(answer, "Balance: ", 9);
-                            //_itoa_s(client->amount, answer + 9, MAX_STRING_SIZE - 9, 10);
-                             memcpy(answer, "Balance: ", 9);
+                            if (md->ammount > client->amount) {                        
+                                client->amount -= md->ammount;
+                                client->credit += client->amount;
+                                client->amount = 0;
+                                transCl->amount += md->ammount;
+                       
+                                char balance[30] = "\nBalance: ";
+                                char char_balance[30];
+                                char char_cr_balance[20];
+                                char credit_balance[100];
+                        
+                                memcpy(credit_balance, "Taking cash from credit account!\n", sizeof("Taking cash from credit account!\n"));
+                                strcat(credit_balance, "Credit account balance: ");
+                        
+		                snprintf(char_balance, sizeof(balance), "%d", client->amount);
+		                snprintf(char_cr_balance, sizeof(char_cr_balance), "%d", client->credit);
+		       
+		                strcat(credit_balance, char_cr_balance);
+		                strcat(balance, char_balance);
+		               
+	        	        strcat(credit_balance, balance);		        
+		                memcpy(answer, credit_balance, sizeof(credit_balance));
+		            }
+		            else {
+                                client->amount -= md->ammount;
+                                transCl->amount += md->ammount;
+                                char balance[15];
+		                snprintf(balance, sizeof(balance), "%d", client->amount);
+                                memcpy(answer, "Balance: ", 9);                            
+                               // memcpy(answer, "Balance: ", 9);
 		     
-		           memcpy(answer + strlen("Balance: "), balance, strlen(balance));
+		                memcpy(answer + strlen("Balance: "), balance, strlen(balance));
+		           }
                         }
-                        else
-                            memcpy(answer, "Error: client for transfer not found in the bank!\0", 50);
-                    }
+                        else memcpy(answer, "Error: client for transfer not found in the bank!\0", 50);
+                    
                     
                 }
                 else if (!strcmp(md->command, "exit")) {
