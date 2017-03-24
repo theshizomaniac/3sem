@@ -17,6 +17,7 @@ void PrintHelp() {
     printf("Usage:\n\
 help                        -- print help\n\
 check                       -- check balance\n\
+transfer [ammount] [id]         -- send the money to the client id\n\
 cr_check                    -- check credit acc balance\n\
 deposit [ammount]           -- put money on the account\n\
 withdraw [ammount]          -- get money from the account\n\
@@ -141,6 +142,20 @@ int main(int argc, char const *argv[]) {
             memcpy(md.command, command, strlen(command) + 1);
             SendCommand(&md, senderSocket);
            }
+           else if (!strcmp(command, "transfer")) {
+             scanf("%d", &md.ammount);
+             if (md.ammount < 0) {
+                 printf("Error: invalid ammount!\n");
+                 continue;
+             }
+             scanf("%lf", &md.transId);
+             if (md.transId < 0 || fabs(md.transId - md.clientId) < EPS) {
+                 printf("Error: invalid id!\n");
+                 continue;
+             }
+             memcpy(md.command, command, strlen(command) + 1);
+             SendCommand(&md, senderSocket);
+        }
         else if (!strcmp(command, "exit")) {
             memcpy(md.command, command, strlen(command) + 1);
             SendCommand(&md, senderSocket);

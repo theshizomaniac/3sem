@@ -181,7 +181,9 @@ int main(int argc, char * argv[])
         printf(":: %s\n", c_answer); 
         if ((!strcmp(md->command, "/chat") || !strcmp(md->command, "/check")) && strcmp(c_answer, "no")) {
                 char sub_chat[20]= "./sub_chat ";
+                char port[5];
                 strcat(sub_chat, c_answer);
+                memcpy(port, c_answer, 5);
                 //printf("arg adress: %s\n", sub_chat);
                 c_answer[strlen(c_answer)-1]++;
                 memcpy(addres + 16, c_answer, strlen(c_answer) + 1);
@@ -203,10 +205,13 @@ int main(int argc, char * argv[])
                         }
                                
                }
-               c_answer[strlen(c_answer)-1]--;
-               memcpy(md->command, "/dc", 3);
-               memcpy(md->message, c_answer, strlen(c_answer) + 1);
+               //c_answer[strlen(c_answer)-1]--;
+               memcpy(md->command, "/dc\0\0\0", 6);
+               memcpy(md->message, port, 5);
                SendCommand(md, mainSocket, c_answer);
+        }
+        else if(!strcmp(c_answer, "no")) {
+            printf("Sorry no requesting chats for you!");
         }
     } 
         

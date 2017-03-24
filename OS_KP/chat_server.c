@@ -47,7 +47,7 @@ void * new_dialog(void * arg)
         zmq_bind(recvSocket, adress);
         printf("RECEVING ADDR: %s\n", adress);
         char answer[MAX_STRING_SIZE];
-        int users_num = 1;
+        int users_num = 0;
         int i= 10;
         while(1) {
                 zmq_msg_t message;
@@ -136,6 +136,7 @@ int main(int argc, char const *argv[]) {
     
     WaitingRoom * starting_chats = (WaitingRoom*) malloc(sizeof(WaitingRoom) * MAX_NUM_OF_DIALOGS);
     starting_chats[0].port = port+1;
+    starting_chats[0].is_online = false;
     for (int i = 1; i < MAX_NUM_OF_DIALOGS; ++i) {
         starting_chats[i].port = starting_chats[i - 1].port;
         starting_chats[i].port += 2;
@@ -211,7 +212,7 @@ int main(int argc, char const *argv[]) {
                      current_free_chat = -1;
                      char char_port[6];
                      for (int i = 0; i < MAX_NUM_OF_DIALOGS; ++i) {
-                        if(!starting_chats[i].is_online) {
+                        if(starting_chats[i].is_online == false) {
                             current_free_chat = i;
                             break;
                         }
@@ -240,6 +241,7 @@ int main(int argc, char const *argv[]) {
                      
                 }
                 else if (!strcmp("/dc", md->command)) {
+                printf("dc prot: %s\n", md->message);
                     for (int i = 0; i < MAX_NUM_OF_DIALOGS; ++i) {
                         if(starting_chats[i].port == atoi(md->message)) {
                             starting_chats[i].is_online = false;
@@ -249,6 +251,16 @@ int main(int argc, char const *argv[]) {
                     }
                     //client->online = false;
                     //memcpy(answer, "Bye!", 4);
+                }
+                else if (!strcmp("/rooms", md->command)) {
+                for (int i = 0; i < MAX_NUM_OF_DIALOGS; ++i) {
+                        printf("chat %d ", starting_chats[i].port);
+                        if(starting_chats[i].is_online == true) {
+                            printf("online\n");
+                            
+                        }
+                        else printf("\n");
+                     }
                 }
                 else if (!strcmp("/exit", md->command)) {
                     client->online = false;
