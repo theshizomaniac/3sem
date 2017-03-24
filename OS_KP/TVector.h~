@@ -1,6 +1,6 @@
-#pragma once
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <math.h>
 #define MIN_CAP 8
 #define EPS 0.000001
@@ -8,11 +8,12 @@
 typedef struct TElem {
     double id;
     char name[20];
-    char sex;
-    int age;
+    char sex[1];
+    char age[2];
     char country[20];
-    char login[10];
-    char pass[10];
+    char login[12];
+    char pass[12];
+    bool online;
 } TElem;
 
 typedef struct {

@@ -1,8 +1,9 @@
 #include "TVector.h"
-
-TElem* NewElem(double id, int amount) {
+#include <string.h>
+TElem* NewElem(char id[], int amount) {
     TElem* elem = (TElem*)malloc(sizeof(TElem));
-    elem->id = id;
+    memcpy(elem->login, id, 12);
+    //elem->id = id;
     //elem->amount = amount;
     //elem->credit = 0;
     return elem;
@@ -47,9 +48,10 @@ void Resize(TVector* vec, int vSize) {
     vec->body = result;
 }
 
-TElem* FindId(TVector* vec, double id) {
+TElem* FindId(TVector* vec, char id[]) {
     for (int i = 0; i < vec->size; i++)
-        if(fabs(vec->body[i]->id - id) < EPS)
+        //if(fabs(vec->body[i]->id - id) < EPS)
+        if (!strcmp(vec->body[i]->login, id))
             return vec->body[i];
     return NULL;
 }

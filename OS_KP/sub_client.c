@@ -20,26 +20,13 @@ typedef struct MessageData {
 
 int main(int argc, char * argv[])
 {
-    /*if (argc == 0) {
-        printf("Enter port: ");
-        scanf("%s", argv[1]);
-    }*/
-    //void* context = zmq_ctx_new();
+    
     void* sub_context = zmq_ctx_new();
-    
-    //void* senderSocket = zmq_socket(context, ZMQ_REQ);
     void* recvSocket = zmq_socket(sub_context, ZMQ_SUB);
-    
-    //char* addres = (char*)malloc(sizeof(char) * 14);
     char* recv_addres = (char*)malloc(sizeof(char) * 14);
     
-    //memcpy(addres, "tcp://localhost:", 16);
-    //memcpy(addres + 16, argv[1], strlen(argv[1]) + 1);
-    
     memcpy(recv_addres, "tcp://localhost:", 16);
-    memcpy(recv_addres + 16, argv[1], strlen(argv[1]) + 1);
-    printf("addr %s\n", recv_addres);
-    //zmq_connect(senderSocket, addres);
+    memcpy(recv_addres + 16, argv[1], strlen(argv[1]) + 1); 
     
     zmq_connect(recvSocket,recv_addres);
     zmq_setsockopt(recvSocket, ZMQ_SUBSCRIBE,"",0);
@@ -48,9 +35,9 @@ int main(int argc, char * argv[])
         zmq_msg_t message;
         zmq_msg_init(&message);
         zmq_msg_recv(&message, recvSocket, 0);
-        //if (!strcmp((char*)zmq_msg_data(&message), "/exit")) {
-        //        exit(0);
-        //}
+        if (!strcmp((char*)zmq_msg_data(&message), "/exit")) {
+                exit(0);
+        }
         printf("%s", (char*)zmq_msg_data(&message));
         zmq_msg_close(&message);
         zmq_msg_close(&message);
