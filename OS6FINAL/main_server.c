@@ -7,8 +7,8 @@
 #define MAX_STRING_SIZE 128
 #define BALANCE_WORD_SIZE strlen("Balance: ")
 typedef struct MessageData {
-    double clientId;
-    double transId;
+    char clientId[20];
+    char transId[20];
     int ammount;
     char command[MAX_STRING_SIZE];
 } MessageData;
@@ -32,10 +32,10 @@ int main(int argc, char const *argv[]) {
     zmq_bind(serverSocket, addres);
     printf("Bank %d starting\n", port);
 
-    TVector* clients = Load(argv[1]);
+    TVector* clients = Create();//Load(argv[1]);
     char answer[MAX_STRING_SIZE];
     while(1) {
-        Save(clients, argv[1]);
+        //Save(clients, argv[1]);
         zmq_msg_t message;
         zmq_msg_init(&message);
         zmq_msg_recv(&message, serverSocket, 0);
@@ -46,7 +46,7 @@ int main(int argc, char const *argv[]) {
             if (!FindId(clients, md->clientId)) {
                 TElem* elem = NewElem(md->clientId, 0);
                 Push(clients, elem);
-                printf("Client %.2lf added\n", md->clientId);
+                printf("Client %s added\n", md->clientId);
                 memcpy(answer, "ok\0", 3);
             }
             else 
@@ -59,7 +59,7 @@ int main(int argc, char const *argv[]) {
 		    char balance[15];
 		    snprintf(balance, sizeof(balance), "%d", client->amount);
                     memcpy(answer, "Balance: ", 9);
-		    printf("client amount: %d char = %s\n", client->amount, balance);
+		    //printf("client amount: %d char = %s\n", client->amount, balance);
 		    memcpy(answer + BALANCE_WORD_SIZE, balance, strlen(balance));
 		    
                     //_itoa_s(client->amount, answer + 9, MAX_STRING_SIZE - 9, 10);
@@ -68,7 +68,7 @@ int main(int argc, char const *argv[]) {
 		    char balance[15];
 		    snprintf(balance, sizeof(balance), "%d", client->credit);
                     memcpy(answer, "Credit account balance: ", strlen("Credit account balance: "));
-		    printf("client credit: %d char = %s\n", client->amount, balance);
+		    //printf("client credit: %d char = %s\n", client->amount, balance);
 		    memcpy(answer + strlen("Credit account balance: "), balance, strlen(balance));
 		    
                     //_itoa_s(client->amount, answer + 9, MAX_STRING_SIZE - 9, 10);
@@ -78,7 +78,7 @@ int main(int argc, char const *argv[]) {
                     char balance[15];
 		    snprintf(balance, sizeof(balance), "%d", client->amount);
                     memcpy(answer, "Balance: ", 9);
-		    printf("client amount: %d\n", client->amount);
+		    //printf("client amount: %d\n", client->amount);
 		    memcpy(answer + BALANCE_WORD_SIZE, balance, strlen(balance));
                     //_itoa_s(client->amount, answer + 9, MAX_STRING_SIZE - 9, 10);
                 }
@@ -174,7 +174,7 @@ int main(int argc, char const *argv[]) {
                 else if (!strcmp(md->command, "exit")) {
                     RemoveElem(clients, md->clientId);
                     memcpy(answer, "Good bye!\0", 10);
-                    printf("Client %.2lf deleted\n", md->clientId);
+                    printf("Client %s deleted\n", md->clientId);
                 }
             }
             else 
@@ -188,7 +188,7 @@ int main(int argc, char const *argv[]) {
         zmq_msg_close(&message);
         memset(answer, '\0', MAX_STRING_SIZE);
     }
-    CloseHandle(exit);
+    //CloseHandle(exit);
     zmq_close(serverSocket);
     zmq_ctx_destroy(context);
     Delete(clients);

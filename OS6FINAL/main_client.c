@@ -7,8 +7,10 @@
 #define EPS 0.000001
 
 typedef struct MessageData {
-    double clientId;
-    double transId;
+    //double clientId;
+    //double transId;
+    char clientId[20];
+    char transId[20];
     int ammount;
     char command[MAX_STRING_SIZE];
 } MessageData;
@@ -17,7 +19,7 @@ void PrintHelp() {
     printf("Usage:\n\
 help                        -- print help\n\
 check                       -- check balance\n\
-transfer [ammount] [id]         -- send the money to the client id\n\
+transfer [ammount] [id]     -- send the money to the client id\n\
 cr_check                    -- check credit acc balance\n\
 deposit [ammount]           -- put money on the account\n\
 withdraw [ammount]          -- get money from the account\n\
@@ -48,8 +50,10 @@ int main(int argc, char const *argv[]) {
     }
 
     int port = atoi(argv[1]);
-    double id = atof(argv[2]);
-    printf("Init id = %f\n", id);
+    //double id = atof(argv[2]);
+    char id[20];
+    memcpy(id, argv[2], strlen (argv[2]) + 1);
+    printf("Init id = %s\n", id);
     if (!port || port > 49151) {
         printf("Error: invalid port!\n");
         return 2;
@@ -63,7 +67,9 @@ int main(int argc, char const *argv[]) {
     zmq_connect(senderSocket, addres);
 
     MessageData init;
-    init.clientId = id;
+    //init.clientId = id;
+    memset(init.clientId, '\0', 20);
+    memcpy(init.clientId, id, 20);
     memcpy(init.command, "init\0", 5);
 
     zmq_msg_t initMessage;
@@ -76,7 +82,7 @@ int main(int argc, char const *argv[]) {
     zmq_msg_init(&reply);
     zmq_msg_recv(&reply, senderSocket, 0);
     if(!strcmp((char*)zmq_msg_data(&reply), "ok"))
-        printf("The client(%.2lf) is initialized on the bank(%d)\n", id, port);
+        printf("The client (%s) is initialized on the bank(%d)\n", id, port);
     else 
         printf("%s\n", (char*)zmq_msg_data(&reply));
     zmq_msg_close(&reply);
@@ -93,8 +99,9 @@ int main(int argc, char const *argv[]) {
             continue;
         }
         MessageData md;
-        md.clientId = id;
-
+        memset(md.clientId, '\0', 20);
+        //md.clientId = id;
+        memcpy(md.clientId, id, 20);
         if (!strcmp(command, "help"))
             PrintHelp();
         else if (!strcmp(command, "check")) {
@@ -148,11 +155,12 @@ int main(int argc, char const *argv[]) {
                  printf("Error: invalid ammount!\n");
                  continue;
              }
-             scanf("%lf", &md.transId);
-             if (md.transId < 0 || fabs(md.transId - md.clientId) < EPS) {
+             //scanf("%lf", &md.transId);
+             scanf("%s", md.transId);
+             /*if (md.transId < 0 || fabs(md.transId - md.clientId) < EPS) {
                  printf("Error: invalid id!\n");
                  continue;
-             }
+             }*/
              memcpy(md.command, command, strlen(command) + 1);
              SendCommand(&md, senderSocket);
         }
