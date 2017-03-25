@@ -182,6 +182,7 @@ int main(int argc, char * argv[])
         if ((!strcmp(md->command, "/chat") || !strcmp(md->command, "/check")) && strcmp(c_answer, "no")) {
                 char sub_chat[20]= "./sub_chat ";
                 char port[5];
+                memset(port, '\0', 5);
                 strcat(sub_chat, c_answer);
                 memcpy(port, c_answer, 5);
                 //printf("arg adress: %s\n", sub_chat);

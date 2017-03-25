@@ -256,7 +256,7 @@ int main(int argc, char *argv[])
                        "-w a b    \twrite a in file on b position\n"
                        "-chs a    \tcheck if a = checksum of file\n"
                        "-s        \tget file size\n"
-                       "-f pattern\tsearch for pattern (add --checkcase to check case)\n"
+                       "-f pattern\tsearch for pattern \n"
                        "filename  \tstart programm in interactive mode\n");
         return 0;
     }

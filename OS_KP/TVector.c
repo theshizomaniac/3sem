@@ -67,9 +67,16 @@ TElem* FindName(TVector* vec, char name[], int *j) {
     for (int i = *j; i < vec->size; i++) {
         //if(fabs(vec->body[i]->id - id) < EPS)
         *j = i + 1;
-        if (!strcmp(vec->body[i]->name, name))
-            return vec->body[i];
+        //if (!strcmp(vec->body[i]->name, name))
+        //    return vec->body[i];
+        //}
+        for (int k = 0; k < strlen(name); ++k) {
+            if (vec->body[i]->name[k] != name[k]) {
+                return NULL;
+            }
         }
+        return vec->body[i];
+    }
     return NULL;
 }
 TElem* FindSex(TVector* vec, char sex[], int *j) {

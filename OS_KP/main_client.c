@@ -108,7 +108,7 @@ int main(int argc, char * argv[])
         scanf("%s", field);
         memcpy(md->message + 47, field, 2);
         
-        printf("Age: ");
+        printf("Age(2): ");
         scanf("%s", field);
         memcpy(md->message + 49, field, 3);
         

@@ -143,7 +143,7 @@ int main(int argc, char const *argv[]) {
         starting_chats[i].is_online = false;
         //printf("port %d = %d\n", i, starting_chats[i].port);
     }
-    TVector* clients = Load(argv[1]);
+    TVector* clients = Create();//Load(argv[1]);
     //TVector* clients = (TVector*)malloc(sizeof(TVector));
     int current_free_chat = 0;
     char answer[MAX_STRING_SIZE];
@@ -159,8 +159,8 @@ int main(int argc, char const *argv[]) {
         printf("MSG:     %s\n\n", md->message);
         
         if (!strcmp(md->command, "/reg")) {
-                    TElem* elem = NewElem(md->name, 0);
-                    
+                if (!FindId(clients, md->name)) {
+                    TElem* elem = NewElem(md->name, 0);                    
                     memcpy(elem->login, md->message, 13);                    
                     memcpy(elem->pass, md->message+13, 13);                     
                     memcpy(elem->name, md->message+26, 21);                    
@@ -168,14 +168,15 @@ int main(int argc, char const *argv[]) {
                     memcpy(elem->age, md->message+49, 3);                    
                     memcpy(elem->country, md->message+52, 3);                 
                     elem->online = true;
-                    Push(clients, elem);
-                    
-                    
-                    memcpy(answer,"Profile created!\0",17);
+                    Push(clients, elem);                                                            
+                    memcpy(answer,"Profile created!\0",17);                    
                 }
-                
+                else {
+                    memcpy(answer,"Sorry, user with this Id already exist\0",17);   
+                }
+         }
          else {
-            printf("md name %s\n", md->name);
+            //printf("md name %s\n", md->name);
             TElem* client = FindId(clients, md->name);
             if (client) {
                 if (!strcmp(md->command, "/check")) {
@@ -241,6 +242,7 @@ int main(int argc, char const *argv[]) {
                      
                 }
                 else if (!strcmp("/dc", md->command)) {
+                printf("dc prot: %s\n", md->message);
                     for (int i = 0; i < MAX_NUM_OF_DIALOGS; ++i) {
                         if(starting_chats[i].port == atoi(md->message)) {
                             starting_chats[i].is_online = false;
