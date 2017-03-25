@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include <stdbool.h>
 #include <string.h>
+#define MAX_MMAP_SIZE 100
 #define handle_error(msg) \
            do { perror(msg); exit(EXIT_FAILURE); } while (0)
 
@@ -113,7 +114,7 @@ void SearchAll (const char * pattern, bool check_case)
     bool is_found = false;
     int prev_i = 0;
     last_string = 1;
-    for (int i = 200; i < sb.st_size; i += 200) {
+    for (int i = MAX_MMAP_SIZE; i < sb.st_size; i += MAX_MMAP_SIZE) {
         Mmap_part(prev_i, i, true);
         if (Search(pattern,check_case)) {
             is_found = true;
@@ -124,6 +125,7 @@ void SearchAll (const char * pattern, bool check_case)
     if (!is_found) {
         printf("\nPattern not found!\n");
     }
+    Munmap_part();
 }
 void PrintD(int a, int b)
 {
@@ -151,12 +153,12 @@ void WriteToFile (const char * string, int pos)
     check_size();
     int z = strlen(string);
 
-    Mmap_part(sb.st_size - 500, sb.st_size,false);
-    int x = 500;
+    Mmap_part(sb.st_size - MAX_MMAP_SIZE, sb.st_size,false);
+    int x = MAX_MMAP_SIZE;
     for (int i = sb.st_size; i >= pos + z; --i) {
         if (x == 0) {
             Munmap_part();
-            Mmap_part(i - 500,i + z,false);
+            Mmap_part(i - MAX_MMAP_SIZE,i + z,false);
 
         }
         addr[i] = addr[i - z];
@@ -178,13 +180,13 @@ void DeleteChars(int a, int b)
 {
     int z = b- a;
     int pos = a;
-    Mmap_part(pos, pos+500,false);
-    int x = 500;
+    Mmap_part(pos, pos+MAX_MMAP_SIZE,false);
+    int x = MAX_MMAP_SIZE;
     for (int i = pos; i < sb.st_size - z; ++i) {
         if (x == 1) {
             Munmap_part();
-            Mmap_part(i,i + 500,false);
-            x = 500;
+            Mmap_part(i,i + MAX_MMAP_SIZE,false);
+            x = MAX_MMAP_SIZE;
         }
         addr[i] = addr[i + z];
         x--;
@@ -221,11 +223,11 @@ void Count ()
     int file_size = sb.st_size;
     int file_size_check = 0;
     int file_strings = 1;
-    Mmap_part(0,500,true);
+    Mmap_part(0,MAX_MMAP_SIZE,true);
     for (int i = 0; i < sb.st_size; ++i) {
-        if (file_size_check % 500 == 0) {
+        if (file_size_check % MAX_MMAP_SIZE == 0) {
             Munmap_part();
-            Mmap_part(i, i + 500, true);
+            Mmap_part(i, i + MAX_MMAP_SIZE, true);
         }
         file_size_check++;
         if(addr[i] == '\n') {
@@ -248,6 +250,10 @@ int main(int argc, char *argv[])
    // off_t offset, pa_offset;
    // size_t length;
   //  ssize_t s;
+    if (argc < 2) {
+        printf("Use -? or --help for usage\n");
+        return 0; 
+    }
     if (!strcmp(argv[1], "--help") || !strcmp(argv[1], "-?")) {
         printf("Usage:\n"
                        "--help -? \tshow usage\n"
@@ -256,7 +262,7 @@ int main(int argc, char *argv[])
                        "-w a b    \twrite a in file on b position\n"
                        "-chs a    \tcheck if a = checksum of file\n"
                        "-s        \tget file size\n"
-                       "-f pattern\tsearch for pattern (add --checkcase to check case)\n"
+                       "-f pattern\tsearch for pattern \n"
                        "filename  \tstart programm in interactive mode\n");
         return 0;
     }
