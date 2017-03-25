@@ -167,10 +167,10 @@ void WriteToFile (const char * string, int pos)
     }
     Munmap_part();
     check_size();
-    if ( msync( addr, pa_offset, MS_SYNC ) < 0 ) {
+    /*if ( msync( addr, pa_offset, MS_SYNC ) < 0 ) {
         perror("msync failed with error:");
     }
-    else (void) printf("%s","msync completed successfully.\n");
+    else (void) printf("%s","msync completed successfully.\n");*/
 }
 
 
