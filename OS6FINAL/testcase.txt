@@ -1,0 +1,74 @@
+/* ALL PROCESSES WORK ODNOVREMENOO*/
+
+//SERVER
+mrhacker@debian:~/labs/3sem/OS6FINAL$ ./server 4040
+Bank 4040 starting
+Client user1 added
+Client user2 added
+
+//CLIENT user1
+mrhacker@debian:~/labs/3sem/OS6FINAL$ ./client 4040 user1
+Init id = 0.000000
+The client (user1) is initialized on the bank(4040)
+Usage:
+help                        -- print help
+check                       -- check balance
+transfer [ammount] [id]     -- send the money to the client id
+cr_check                    -- check credit acc balance
+deposit [ammount]           -- put money on the account
+withdraw [ammount]          -- get money from the account
+cr_deposit [ammount]        -- put money on credit account
+cr_withdraw [ammount]       -- get money from credit account
+exit                        -- exit program
+Enter the command: check
+Balance: 0
+Enter the command: cr_check
+Credit account balance: 0
+Enter the command: deposit 200
+Balance: 200
+Enter the command: withdraw 50
+Balance: 150
+Enter the command: withdraw 300
+Taking cash from credit account!
+Credit account balance: -150
+Balance: 0
+Enter the command: cr_deposit 150
+Credit account balance: 0
+Enter the command: deposit 200
+Balance: 200
+Enter the command: transfer 100 user2
+Balance: 100
+Enter the command: check  
+Balance: 300
+Enter the command: 
+
+
+//CLIENT user2
+mrhacker@debian:~/labs/3sem/OS6FINAL$ ./client 4040 user2
+Init id = 0.000000
+The client (user2) is initialized on the bank(4040)
+Usage:
+help                        -- print help
+check                       -- check balance
+transfer [ammount] [id]     -- send the money to the client id
+cr_check                    -- check credit acc balance
+deposit [ammount]           -- put money on the account
+withdraw [ammount]          -- get money from the account
+cr_deposit [ammount]        -- put money on credit account
+cr_withdraw [ammount]       -- get money from credit account
+exit                        -- exit program
+Enter the command: check
+Balance: 0
+Enter the command: check
+Balance: 100
+Enter the command: transfer 200 user1
+Taking cash from credit account!
+Credit account balance: -100
+Balance: 0
+Enter the command: withdraw 10000
+Too much money! (limit reached)
+
+Enter the command: transfer 10000 user1
+Too much money! (limit reached)
+
+

@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "TVector.h"
+#define MAX_CREDIT_SIZE 1000
 #define MAX_STRING_SIZE 128
 #define BALANCE_WORD_SIZE strlen("Balance: ")
 typedef struct MessageData {
@@ -85,7 +86,12 @@ int main(int argc, char const *argv[]) {
                 else if (!strcmp(md->command, "withdraw")) {
                     if (md->ammount > client->amount) {
                      
-                        client->amount -= md->ammount;
+                        if(md->ammount -client->amount>= MAX_CREDIT_SIZE) {
+                            memcpy(answer, "Too much money! (limit reached)\n", strlen("Too much money! (limit reached)\n") + 1);
+                            
+                        }
+                        else {
+                        client->amount -= md->ammount;                       
                         client->credit += client->amount;
                         client->amount = 0;
                        
@@ -105,7 +111,7 @@ int main(int argc, char const *argv[]) {
 		       
 		        strcat(credit_balance, balance);		        
 		        memcpy(answer, credit_balance, sizeof(credit_balance));     
-                        
+                        }
                         }
                     else {
                         client->amount -= md->ammount;
@@ -133,7 +139,11 @@ int main(int argc, char const *argv[]) {
                 else if (!strcmp(md->command, "transfer")) {
                         TElem* transCl = FindId(clients, md->transId);
                         if (transCl) {
-                            if (md->ammount > client->amount) {                        
+                            if (md->ammount > client->amount) { 
+                                if(md->ammount -client->amount>= MAX_CREDIT_SIZE) {
+                                     memcpy(answer, "Too much money! (limit reached)\n", strlen("Too much money! (limit reached)\n") + 1);                            
+                                }
+                                else {                       
                                 client->amount -= md->ammount;
                                 client->credit += client->amount;
                                 client->amount = 0;
@@ -155,6 +165,7 @@ int main(int argc, char const *argv[]) {
 		               
 	        	        strcat(credit_balance, balance);		        
 		                memcpy(answer, credit_balance, sizeof(credit_balance));
+		                }
 		            }
 		            else {
                                 client->amount -= md->ammount;
