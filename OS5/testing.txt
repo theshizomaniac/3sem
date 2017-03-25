@@ -1,0 +1,62 @@
+/* */
+
+mrhacker@debian:~/labs/3sem/OS5$ ./list
+List created!
+Head created
+Data added1
+Data added!
+Data added!
+Data added!
+Data added!
+Data added!
+Data added!
+Data added!
+Data added!
+head = 0 
+node 2 data = 1 
+node 3 data = 2 
+node 4 data = 3 
+node 5 data = 4 
+node 6 data = 5 
+node 7 data = 6 
+node 8 data = 7 
+node 9 data = 8 
+node 10 data = 9 
+head deleted
+head = 1 
+node 2 data = 3 
+node 3 data = 5 
+node 4 data = 7 
+node 5 data = 9 
+
+/* */
+mrhacker@debian:~/labs/3sem/OS5$ ./dlist
+> Init
+List created!
+> Insert 10 0
+OK
+> Print
+10 
+> Insert 20 1
+OK
+> Print
+10 <-> 20
+> Insert 30 2
+OK
+> Print
+10 <-> 20 <-> 30
+> Remove 1
+> Print
+10 <-> 30
+> exit
+
+
+/* */
+mrhacker@debian:~/labs/3sem/OS5$ ./dlist
+> Insert 10 0
+Init list!
+> Remove 10 1
+Init list!
+> 
+
+

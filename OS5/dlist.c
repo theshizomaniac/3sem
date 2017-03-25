@@ -36,6 +36,7 @@ void LoadList()
         return;
     }
     char method [50];
+    int inited_list = 0;
     char arg1[50],arg2[50],arg3[50];
 
     TList * w_list;
@@ -67,6 +68,7 @@ void LoadList()
             }
             /* Call the resolved method and print the result */
             w_list = (*list)();
+            inited_list = 1;
         }
         else if (!strcmp(method,"Print")){
             void (*func)(TList*);
@@ -80,6 +82,10 @@ void LoadList()
 
         }
         else if (!strcmp(method,"Insert")){
+            if (!inited_list) {
+                printf("Init list!\n");
+                continue;
+            }
             uint32_t data;
             int in_index;
             scanf("%d %d", &data, &in_index);
@@ -94,6 +100,10 @@ void LoadList()
 
         }
         else if (!strcmp(method, "Remove")) {
+            if (!inited_list) {
+                printf("Init list!\n");
+                continue;
+            }
             int rm_index;
             scanf("%d", &rm_index);
             void (*func)(TList*,int);

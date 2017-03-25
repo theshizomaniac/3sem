@@ -1,4 +1,4 @@
-gcc -o tlist.o -c TList.c -fPIC
+gcc -std=c11 -o tlist.o -c TList.c -fPIC
 gcc -shared -o mylist.so tlist.o 
-gcc -rdynamic dlist.c -o dlist -ldl
+gcc -rdynamic -std=c11 dlist.c -o dlist2 -ldl
 
