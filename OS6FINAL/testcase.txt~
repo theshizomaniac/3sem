@@ -67,6 +67,7 @@ Credit account balance: -100
 Balance: 0
 Enter the command: withdraw 10000
 Too much money! (limit reached)
+
 Enter the command: transfer 10000 user1
 Too much money! (limit reached)
 

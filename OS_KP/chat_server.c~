@@ -172,7 +172,7 @@ int main(int argc, char const *argv[]) {
                     memcpy(answer,"Profile created!\0",17);                    
                 }
                 else {
-                    memcpy(answer,"Sorry, user with this Id already exist\0",17);   
+                    memcpy(answer,"Sorry, user with this Id already exist\0",strlen("Sorry, user with this Id already exist\0") +1);   
                 }
          }
          else {
@@ -222,6 +222,7 @@ int main(int argc, char const *argv[]) {
                          memcpy(answer, "no",2);
                          continue; 
                      }
+                     else {
                      snprintf(char_port, sizeof(char_port), "%d", starting_chats[current_free_chat].port);
                      memcpy(starting_chats[current_free_chat].reqId, md->name,12);
                      memcpy(starting_chats[current_free_chat].sleepingId, md->message,12);
@@ -239,6 +240,7 @@ int main(int argc, char const *argv[]) {
                         memcpy(answer, "Room creation failed!", 14);
                         //return -1;
                      }
+                     }
                      
                 }
                 else if (!strcmp("/dc", md->command)) {
@@ -247,11 +249,10 @@ int main(int argc, char const *argv[]) {
                         if(starting_chats[i].port == atoi(md->message)) {
                             starting_chats[i].is_online = false;
                             current_free_chat = i;
+                            memcpy(answer, "Disconnected", 14);
                             break;
                         }
                     }
-                    //client->online = false;
-                    //memcpy(answer, "Bye!", 4);
                 }
                 else if (!strcmp("/rooms", md->command)) {
                 for (int i = 0; i < MAX_NUM_OF_DIALOGS; ++i) {

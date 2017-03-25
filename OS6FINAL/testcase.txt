@@ -8,7 +8,6 @@ Client user2 added
 
 //CLIENT user1
 mrhacker@debian:~/labs/3sem/OS6FINAL$ ./client 4040 user1
-Init id = 0.000000
 The client (user1) is initialized on the bank(4040)
 Usage:
 help                        -- print help
@@ -45,7 +44,6 @@ Enter the command:
 
 //CLIENT user2
 mrhacker@debian:~/labs/3sem/OS6FINAL$ ./client 4040 user2
-Init id = 0.000000
 The client (user2) is initialized on the bank(4040)
 Usage:
 help                        -- print help

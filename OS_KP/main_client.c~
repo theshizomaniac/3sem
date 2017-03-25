@@ -39,6 +39,7 @@ void SendCommand(MessageData* md, void* senderSocket, char * answer) {
     zmq_msg_send(&zmqMessage, senderSocket, 0);
     zmq_msg_recv(&reply, senderSocket, 0);
     memcpy(answer, (char*)zmq_msg_data(&reply), MAX_MESSAGE_SIZE);
+    //printf("msg recieved\n");
     zmq_msg_close(&zmqMessage);
     zmq_msg_close(&reply);
 }
@@ -47,17 +48,14 @@ void SendCommand(MessageData* md, void* senderSocket, char * answer) {
 int main(int argc, char * argv[])
 {
 
-    void* context = zmq_ctx_new();
+    //void* context = zmq_ctx_new();
     void* main_context = zmq_ctx_new();
-    //void* sub_context = zmq_ctx_new();
     
-    void* senderSocket = zmq_socket(context, ZMQ_REQ);
-    void* mainSocket = zmq_socket(context, ZMQ_REQ);
-    //void* recvSocket = zmq_socket(sub_context, ZMQ_SUB);
+    //void* senderSocket = zmq_socket(context, ZMQ_REQ);
+    void* mainSocket = zmq_socket(main_context, ZMQ_REQ);
     
     char* main_addres = (char*)malloc(sizeof(char) * 14);
     char* addres = (char*)malloc(sizeof(char) * 14);
-    //char* recv_addres = (char*)malloc(sizeof(char) * 14);
     
     memcpy(addres, "tcp://localhost:", 16);
     memcpy(main_addres, "tcp://localhost:", 16);
@@ -68,15 +66,12 @@ int main(int argc, char * argv[])
     int i = 10;
     char answer[MAX_MESSAGE_SIZE];
     char name[NAME_SIZE];
-    //printf("Enter your name: ");
     MessageData * md = (MessageData*) malloc(sizeof(MessageData));
     memset(md->name, '\0', 13);  
        
      /* INIT PART*/
      
      char * c_answer = (char*) malloc(sizeof(char) * MAX_MESSAGE_SIZE);
-     //SendCommand(md, mainSocket, c_answer);
-     //printf("%s\n", c_answer);
      memset(md->message, '\0', MAX_MESSAGE_SIZE);
      memset(md->command, '\0', MAX_CMD_SIZE);
      while (1) {
@@ -108,7 +103,7 @@ int main(int argc, char * argv[])
         scanf("%s", field);
         memcpy(md->message + 47, field, 2);
         
-        printf("Age: ");
+        printf("Age(2): ");
         scanf("%s", field);
         memcpy(md->message + 49, field, 3);
         
@@ -117,9 +112,7 @@ int main(int argc, char * argv[])
         scanf("%s", field);
         memcpy(md->message + 52, field, 3);
         
-        
         strcpy(md->name,name);       
-        
         SendCommand(md, mainSocket, c_answer);
         printf("%s\n", c_answer);
         if(!strcmp(c_answer, "Profile created!")) {
@@ -137,7 +130,7 @@ int main(int argc, char * argv[])
         strcpy(md->command, "/sign"); 
         printf("Login (12): ");
         scanf("%s", name);
-        printf("%s\n", name);
+        //printf("%s\n", name);
         strcpy(md->name,name); 
         printf("Pass (12) : ");
         scanf("%s", pass);
@@ -163,7 +156,6 @@ int main(int argc, char * argv[])
         printf("> ");
         scanf("%s", md->command);
         if (!strcmp(md->command,"/chat")) {
-            //fgets(md->message, MAX_MESSAGE_SIZE, stdin);
             scanf("%s", md->message);
         }
         else if(!strcmp(md->command,"/findage") || !strcmp(md->command,"/findname")
@@ -182,34 +174,55 @@ int main(int argc, char * argv[])
         if ((!strcmp(md->command, "/chat") || !strcmp(md->command, "/check")) && strcmp(c_answer, "no")) {
                 char sub_chat[20]= "./sub_chat ";
                 char port[5];
+                char send_address[21];
                 memset(port, '\0', 5);
                 strcat(sub_chat, c_answer);
                 memcpy(port, c_answer, 5);
-                //printf("arg adress: %s\n", sub_chat);
                 c_answer[strlen(c_answer)-1]++;
-                memcpy(addres + 16, c_answer, strlen(c_answer) + 1);
-                zmq_connect(senderSocket, addres);
+                
+                memcpy(send_address, "tcp://localhost:", 16);
+                memcpy(send_address + 16, c_answer, strlen(c_answer) + 1);
+                void* context = zmq_ctx_new(); 
+                void* senderSocket = zmq_socket(context, ZMQ_REQ);
+    
+                zmq_connect(senderSocket, send_address);
+                memset(send_address, '\0', 21);
                 pid_t chat;
                 chat = fork();
                 if (chat == 0) {
-                        //sleep(5);   
+                        sleep(1);   
                         execl("/usr/bin/xterm", "xterm", "-e", sub_chat, NULL);
                 }
                 /* STARTING DIALOG */
-                while(1) {
+                else {
+                    getchar();
+                    memset(md->message, '\0', MAX_MESSAGE_SIZE);
+                    fflush(stdin);
+                    fflush(stdout);
+                    //sleep(1);
+                    int msg_num = 0;
+                    while(1) {
+                        
+                        msg_num++;
+                        if (msg_num == 1) {
+                            sleep(1);
+                        }
                         printf(">> ");
                         fgets(md->message, MAX_MESSAGE_SIZE, stdin);
+                        //scanf("%s", md->message);
                         SendCommand(md, senderSocket, c_answer);
+                        
                         memset(md->message, '\0', MAX_MESSAGE_SIZE);
                         if (!strcmp("dc", c_answer)) {
                             break;
-                        }
-                               
+                        }                               
+                    }
+                    zmq_close(senderSocket);
+                    zmq_ctx_destroy(context);
+                    memcpy(md->command, "/dc\0\0\0", 6);
+                    memcpy(md->message, port, 5);
+                    SendCommand(md, mainSocket, c_answer);
                }
-               //c_answer[strlen(c_answer)-1]--;
-               memcpy(md->command, "/dc\0\0\0", 6);
-               memcpy(md->message, port, 5);
-               SendCommand(md, mainSocket, c_answer);
         }
         else if(!strcmp(c_answer, "no")) {
             printf("Sorry no requesting chats for you!");

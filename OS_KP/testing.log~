@@ -1,0 +1,233 @@
+
+/*   */
+mrhacker@debian:~/labs/3sem/OS_KP$ ./user 4444
+1) Sign In
+2) Sign up
+3) Exit
+2
+|--Creating new profile--|
+Login (12): user1
+Pass (12): qwerty
+Name (20): User1
+Sex (M/F): M
+Age(2): 33
+Country (2): US
+Profile created!
+--Useful commands (type /help)
+    /chat           [user login(12)]      -- start chat with [user]
+    /check                                -- check for avaible chats
+    /findname       [user name(20)]       -- find users with [name]
+    /findage        [user age(2)]         -- find users with [age]
+    /findsex        [user sex(1)]         -- find users with [sex]
+    /findcn         [user country(2)]     -- find users with [country]
+> /findage 33
+:: 
+Id: user1
+Name: User1
+Age: 33
+Sex: M
+Country: US
+> /findsex M 
+:: 
+Id: user1
+Name: User1
+Age: 33
+Sex: M
+Country: US
+Id: user2
+Name: User2
+Age: 18
+Sex: M
+Country: GB
+> /findcn GB
+:: 
+Id: user2
+Name: User2
+Age: 18
+Sex: M
+Country: GB
+> /findname User
+:: 
+Id: user1
+Name: User1
+Age: 33
+Sex: M
+Country: US
+Id: user2
+Name: User2
+Age: 18
+Sex: M
+Country: GB
+> /chat user2
+:: 4445
+>> Hi    
+>> Bye
+>> /dis
+>
+
+/*  */
+mrhacker@debian:~/labs/3sem/OS_KP$ ./user 4444
+1) Sign In
+2) Sign up
+3) Exit
+2
+|--Creating new profile--|
+Login (12): user2
+Pass (12): 123
+Name (20): User2
+Sex (M/F): M
+Age(2): 18
+Country (2): GB
+Profile created!
+--Useful commands (type /help)
+    /chat           [user login(12)]      -- start chat with [user]
+    /check                                -- check for avaible chats
+    /findname       [user name(20)]       -- find users with [name]
+    /findage        [user age(2)]         -- find users with [age]
+    /findsex        [user sex(1)]         -- find users with [sex]
+    /findcn         [user country(2)]     -- find users with [country]
+> /check
+:: 4445
+>> Hello
+>> Good bye!
+>> /dis
+>
+
+*/  */
+
+mrhacker@debian:~/labs/3sem/OS_KP$ ./user 4444
+1) Sign In
+2) Sign up
+3) Exit
+1
+Login (12): user1
+Pass (12) : qwerty
+Success!
+--Useful commands (type /help)
+    /chat           [user login(12)]      -- start chat with [user]
+    /check                                -- check for avaible chats
+    /findname       [user name(20)]       -- find users with [name]
+    /findage        [user age(2)]         -- find users with [age]
+    /findsex        [user sex(1)]         -- find users with [sex]
+    /findcn         [user country(2)]     -- find users with [country]
+> /check
+:: no
+Sorry no requesting chats for you!
+> /check
+:: 4445
+>> hello
+>> bye
+>> /dis
+> 
+
+/* */
+mrhacker@debian:~/labs/3sem/OS_KP$ ./user 4444
+1) Sign In
+2) Sign up
+3) Exit
+1
+Login (12): user2
+Pass (12) : 123
+Success!
+--Useful commands (type /help)
+    /chat           [user login(12)]      -- start chat with [user]
+    /check                                -- check for avaible chats
+    /findname       [user name(20)]       -- find users with [name]
+    /findage        [user age(2)]         -- find users with [age]
+    /findsex        [user sex(1)]         -- find users with [sex]
+    /findcn         [user country(2)]     -- find users with [country]
+> /chat user1
+:: 4445
+>> hi
+>> good bye!
+>> /dis
+> 
+
+/* */
+mrhacker@debian:~/labs/3sem/OS_KP$ ./server 4444
+Char server 4444 starting
+COMMAND: /reg
+MSG:     user1
+
+COMMAND: /help
+MSG:     
+
+COMMAND: /findage
+MSG:     33
+
+COMMAND: /reg
+MSG:     user2
+
+COMMAND: /findsex
+MSG:     M
+
+COMMAND: /findcountry
+MSG:     ry
+
+COMMAND: US
+MSG:     
+
+COMMAND: /findcn
+MSG:     US
+
+COMMAND: /findcn
+MSG:     US
+
+COMMAND: /findcn
+MSG:     GB
+
+COMMAND: /findname
+MSG:     User
+
+it
+it
+COMMAND: /chat
+MSG:     user2
+
+starting chat
+SENDING ADDR: tcp://*:4445
+RECEVING ADDR: tcp://*:4446
+COMMAND: /check
+MSG:     
+
+user1 disconnected
+COMMAND: /dc
+MSG:     4445
+
+dc prot: 4445
+user2 disconnected
+COMMAND: /dc
+MSG:     4445
+
+dc prot: 4445
+
+COMMAND: /sign
+MSG:     user1 qwerty
+
+COMMAND: /check
+MSG:     
+
+COMMAND: /sign
+MSG:     user2 123
+
+COMMAND: /chat
+MSG:     user1
+
+starting chat
+SENDING ADDR: tcp://*:4445
+RECEVING ADDR: tcp://*:4446
+COMMAND: /check
+MSG:     
+
+user2 disconnected
+COMMAND: /dc
+MSG:     4445
+
+dc prot: 4445
+user1 disconnected
+COMMAND: /dc
+MSG:     4445
+
+dc prot: 4445
+
+
